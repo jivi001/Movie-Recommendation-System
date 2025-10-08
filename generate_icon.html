@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator - Tamil MovieRec</title>
+    <style>
+        body { 
+            font-family: 'Inter', Arial, sans-serif; 
+            padding: 40px;
+            background: #0f172a;
+            color: white;
+        }
+        h1 {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+        canvas { 
+            border: 2px solid #475569; 
+            margin: 10px; 
+            border-radius: 10px;
+        }
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #1e293b;
+            color: #f59e0b;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        a:hover {
+            background: #334155;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .icon-item {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Tamil MovieRec Icon Generator</h1>
+    <p>Click the button below to generate all required PWA icons</p>
+    <button onclick="generateIcons()">Generate All Icons</button>
+    
+    <div id="icons" class="icon-grid"></div>
+    
+    <script>
+        function generateIcons() {
+            const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+            const container = document.getElementById('icons');
+            container.innerHTML = '<p style="grid-column: 1/-1;">Generating icons...</p>';
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                sizes.forEach(size => {
+                    const iconItem = document.createElement('div');
+                    iconItem.className = 'icon-item';
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Background gradient (Tamil cinema colors)
+                    const gradient = ctx.createLinearGradient(0, 0, size, size);
+                    gradient.addColorStop(0, '#f59e0b');
+                    gradient.addColorStop(0.5, '#ea580c');
+                    gradient.addColorStop(1, '#dc2626');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, size, size);
+                    
+                    // Film emoji
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `bold ${size * 0.5}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🎬', size / 2, size / 2);
+                    
+                    // Add to container
+                    const sizeLabel = document.createElement('h3');
+                    sizeLabel.textContent = `${size}x${size}px`;
+                    sizeLabel.style.color = '#f59e0b';
+                    iconItem.appendChild(sizeLabel);
+                    iconItem.appendChild(canvas);
+                    
+                    // Download link
+                    canvas.toBlob((blob) => {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `icon-${size}.png`;
+                        link.textContent = `⬇️ Download`;
+                        iconItem.appendChild(link);
+                    });
+                    
+                    container.appendChild(iconItem);
+                });
+            }, 100);
+        }
+        
+        // Auto-generate on load
+        window.addEventListener('load', () => {
+            generateIcons();
+        });
+    </script>
+</body>
+</html>
