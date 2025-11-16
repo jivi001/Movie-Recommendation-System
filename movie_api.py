@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 import os
+from pathlib import Path
 
 app = FastAPI(title="Tamil Movie Recommendation API")
 
@@ -44,39 +45,52 @@ class PreferenceRequest(BaseModel):
 def load_movies_on_startup():
     """Load Tamil movies CSV on server startup"""
     global movies_df, tfidf_vectorizer, tfidf_matrix
-    
-    csv_path = "Tamil-movies-cleaned.csv"
-    
-    # Check if cleaned version exists, otherwise use original
-    if not os.path.exists(csv_path):
-        csv_path = "Tamil-movies.csv"
-        
-        if not os.path.exists(csv_path):
-            print("❌ Error: Tamil-movies.csv not found!")
-            return
-        
-        # Clean the original CSV
-        print("📊 Cleaning movie data...")
-        df = pd.read_csv(csv_path)
-        
+    # Use absolute paths relative to this file so loading works regardless of cwd
+    base_dir = Path(__file__).resolve().parent
+    original_csv = base_dir / "Tamil movies.csv"
+    cleaned_csv = base_dir / "Tamil-movies-cleaned.csv"
+
+    # Prefer cleaned CSV if present
+    if cleaned_csv.exists():
+        print(f"📂 Loading cleaned movie data from {cleaned_csv.name}...")
+        movies_df = pd.read_csv(cleaned_csv)
+    elif original_csv.exists():
+        print(f"📊 Loading and normalizing original data from {original_csv.name}...")
+        df = pd.read_csv(original_csv)
+
+        # Normalize columns into the shape expected by the rest of the app
         movies_df = pd.DataFrame()
         movies_df['movieId'] = range(len(df))
-        movies_df['title'] = df['movie_title']
-        movies_df['genres'] = df['genres'].fillna('Unknown')
-        movies_df['director'] = df['director_name'].fillna('Unknown')
+        # Common fallbacks if column names vary
+        movies_df['title'] = df.get('movie_title') or df.get('title') or df.iloc[:,0]
+        movies_df['genres'] = df.get('genres', pd.Series(['Unknown']*len(df))).fillna('Unknown')
+        movies_df['director'] = df.get('director_name') or df.get('director') or pd.Series(['Unknown']*len(df))
+
+        # Build a cast column from available actor columns
+        a1 = df.get('actor_1_name') if 'actor_1_name' in df.columns else df.get('cast')
+        a2 = df.get('actor_2_name') if 'actor_2_name' in df.columns else None
+        a3 = df.get('actor_3_name') if 'actor_3_name' in df.columns else None
+
+        def safe_series(s):
+            if s is None:
+                return pd.Series(['']*len(df))
+            return s.fillna('')
+
         movies_df['cast'] = (
-            df['actor_1_name'].fillna('') + ', ' + 
-            df['actor_2_name'].fillna('') + ', ' + 
-            df['actor_3_name'].fillna('')
-        )
-        movies_df['cast'] = movies_df['cast'].str.strip(', ')
-        
-        # Save cleaned version
-        movies_df.to_csv('Tamil-movies-cleaned.csv', index=False)
-        print(f"✅ Saved cleaned data to Tamil-movies-cleaned.csv")
+            safe_series(a1).astype(str) + ', ' +
+            safe_series(a2).astype(str) + ', ' +
+            safe_series(a3).astype(str)
+        ).str.replace(r'^(,\s)+|(?:,\s)+$', '', regex=True).str.strip(', ')
+
+        # Persist cleaned file for faster startup next time
+        try:
+            movies_df.to_csv(cleaned_csv, index=False)
+            print(f"✅ Saved cleaned data to {cleaned_csv.name}")
+        except Exception as e:
+            print(f"⚠️ Warning: failed to save cleaned CSV: {e}")
     else:
-        print("📂 Loading cleaned movie data...")
-        movies_df = pd.read_csv(csv_path)
+        print("❌ Error: No dataset found. Expected 'Tamil movies.csv' in project root.")
+        return
     
     # Prepare content for TF-IDF
     movies_df['content'] = (

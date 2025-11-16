@@ -1,13 +1,18 @@
 {
-  "name": "Tamil MovieRec - Tamil Movie Recommendations",
+  "name": "Tamil MovieRec - Discover Tamil Cinema",
   "short_name": "Tamil MovieRec",
-  "description": "Discover Tamil movies based on your mood, genre preferences, favorite directors and actors",
+  "description": "Discover and explore Tamil movies based on your mood, favorite genres, directors, and actors. Get personalized recommendations powered by machine learning.",
+  "version": "1.0.0",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#f59e0b",
   "orientation": "portrait-primary",
-  "categories": ["entertainment", "movies"],
+  "categories": ["entertainment", "movies", "lifestyle"],
+  "lang": "en-US",
+  "dir": "ltr",
+  
   "icons": [
     {
       "src": "/static/icons/icon-72.png",
@@ -58,49 +63,96 @@
       "purpose": "any maskable"
     }
   ],
+  
   "screenshots": [
     {
       "src": "/static/screenshots/screenshot-desktop.png",
       "sizes": "1920x1080",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "Browse Tamil movies on desktop"
     },
     {
       "src": "/static/screenshots/screenshot-mobile.png",
       "sizes": "750x1334",
       "type": "image/png",
-      "form_factor": "narrow"
+      "form_factor": "narrow",
+      "label": "Find movies on mobile"
     }
   ],
+  
   "shortcuts": [
     {
-      "name": "Search Movies",
-      "short_name": "Search",
-      "description": "Search for Tamil movies",
-      "url": "/#search",
+      "name": "Get Recommendations",
+      "short_name": "Recommend",
+      "description": "Get personalized Tamil movie recommendations",
+      "url": "/#preference-section",
       "icons": [
         {
-          "src": "/static/icons/search-icon.png",
-          "sizes": "96x96"
+          "src": "/static/icons/shortcut-recommend.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     },
     {
-      "name": "Get Recommendations",
-      "short_name": "Recommend",
-      "description": "Get personalized movie recommendations",
-      "url": "/#recommendations",
+      "name": "Search Movies",
+      "short_name": "Search",
+      "description": "Search for Tamil movies by title, director, or actor",
+      "url": "/#search",
       "icons": [
         {
-          "src": "/static/icons/recommend-icon.png",
-          "sizes": "96x96"
+          "src": "/static/icons/shortcut-search.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Browse by Mood",
+      "short_name": "Mood",
+      "description": "Find movies matching your current mood",
+      "url": "/#mood-container",
+      "icons": [
+        {
+          "src": "/static/icons/shortcut-mood.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     }
   ],
+  
   "prefer_related_applications": false,
   "related_applications": [],
-  "scope": "/",
-  "lang": "en-US",
-  "dir": "ltr"
+  
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+movierec",
+      "url": "/movie?id=%s"
+    }
+  ],
+  
+  "file_handlers": [
+    {
+      "action": "/import-list",
+      "accept": {
+        "text/csv": [".csv"],
+        "application/json": [".json"]
+      }
+    }
+  ]
 }
