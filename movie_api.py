@@ -51,7 +51,7 @@ def load_movies_on_startup():
     movies_df['movieId'] = range(len(df))
     movies_df['title'] = df.get('movie_title', df.get('title', df.iloc[:, 0]))
     movies_df['genres'] = df.get('genres', pd.Series(['Unknown']*len(df)))
-    movies_df['director'] = df.get('director_name', df.get('director', pd.Series(['Unknown']*len(df)))
+    movies_df['director'] = df.get('director_name', df.get('director', pd.Series(['Unknown']*len(df))))
     a1 = df.get('actor_1_name', df.get('cast', pd.Series(['']*len(df))))
     a2 = df.get('actor_2_name', pd.Series(['']*len(df)))
     a3 = df.get('actor_3_name', pd.Series(['']*len(df)))
