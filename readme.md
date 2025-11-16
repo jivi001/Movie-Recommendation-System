@@ -25,7 +25,7 @@ Data Storage: CSV files (Tamil-movies.csv, Tamil-movies-cleaned.csv)
 Installation & Setup
 1. Clone the Repository
 bash
-git clone https://github.com/yourusername/tamil-movie-rec.git
+git clone https://github.com/jivi001/Movie-Recommendation-System
 cd tamil-movie-rec
 2. Setup Environment
 Install Python (recommended 3.9+)
