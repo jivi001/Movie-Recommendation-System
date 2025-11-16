@@ -1,15 +1,5 @@
-# Web Framework
 fastapi
-uvicorn[standard]
-python-multipart
-
-# CORS Support
-fastapi-cors
-
-# Data Processing
+uvicorn
 pandas
 numpy
-
-# Machine Learning
 scikit-learn
-
