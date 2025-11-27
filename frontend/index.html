@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tamil MovieRec</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="/static/favicon.ico" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch | Premium Tamil Movie Recommendations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/favicon.ico">
 </head>
 <body>
-  <main class="main-container fade-in">
-    <h1 class="title">🎬 Tamil MovieRec</h1>
-    <p class="subtitle">
-      Discover the best Tamil movies — filter by <b>genre</b>, <b>director</b>, or <b>actor</b>.<br>
-      Smart, fast, and beautiful movie recommendations.
-    </p>
-    <form class="form-row" id="searchForm" autocomplete="off">
-      <select id="genreSelect" class="input"></select>
-      <input type="text" id="directorInput" placeholder="Director (optional)" class="input" />
-      <input type="text" id="actorInput" placeholder="Actor (optional)" class="input" />
-      <button type="submit" class="btn btn-glow">Recommend 🎥</button>
-    </form>
-    <div id="loadingBar" class="loading-bar"></div>
-    <div id="movieResults" class="results"></div>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🎬</span>
+                <span class="logo-text">CineMatch</span>
+            </div>
+            <p class="tagline">Discover your next favorite Tamil movie.</p>
+        </header>
+
+        <main class="main-content">
+            <section class="search-section">
+                <form id="searchForm" class="search-form" autocomplete="off">
+                    <div class="input-group">
+                        <label for="genreSelect">Genre</label>
+                        <div class="select-wrapper">
+                            <select id="genreSelect" class="input-field">
+                                <option value="" disabled selected>Select a Genre</option>
+                            </select>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="directorInput">Director</label>
+                        <input type="text" id="directorInput" placeholder="e.g. Mani Ratnam" class="input-field">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="actorInput">Actor</label>
+                        <input type="text" id="actorInput" placeholder="e.g. Rajinikanth" class="input-field">
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="recommendBtn">
+                        <span class="btn-text">Get Recommendations</span>
+                        <span class="btn-icon">✨</span>
+                    </button>
+                </form>
+            </section>
+
+            <div id="loadingIndicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <span>Curating movies for you...</span>
+            </div>
+
+            <section id="resultsSection" class="results-section">
+                <!-- Movie cards will be injected here -->
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 CineMatch. Powered by AI & Tamil Cinema.</p>
+        </footer>
+    </div>
+
     <div id="toast" class="toast hidden"></div>
-    <footer class="footer">
-      <span>Powered by FastAPI + Python • Crafted with ❤️</span>
-    </footer>
-  </main>
-  <script src="/static/main.js"></script>
+    <script src="/static/main.js"></script>
 </body>
 </html>

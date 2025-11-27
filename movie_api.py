@@ -42,16 +42,26 @@ def load_movies_on_startup():
     csv_path = base_dir / "Tamil-movies-cleaned.csv"
     if not csv_path.exists():
         csv_path = base_dir / "Tamil movies.csv"
+    
     if not csv_path.exists():
-        print("❌ Error: No dataset found.")
+        print("❌ Error: No dataset found. Please ensure 'Tamil-movies-cleaned.csv' or 'Tamil movies.csv' exists in the directory.")
+        # Create an empty DataFrame to prevent crashes
+        movies_df = pd.DataFrame(columns=['movieId', 'title', 'genres', 'director', 'cast', 'content'])
+        tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+        tfidf_matrix = tfidf_vectorizer.fit_transform([''])
         return
 
-    df = pd.read_csv(csv_path)
+    try:
+        df = pd.read_csv(csv_path)
+    except Exception as e:
+        print(f"❌ Error reading CSV file: {e}")
+        return
+
     movies_df = pd.DataFrame()
     movies_df['movieId'] = range(len(df))
     movies_df['title'] = df.get('movie_title', df.get('title', df.iloc[:, 0]))
-    movies_df['genres'] = df.get('genres', pd.Series(['Unknown']*len(df)))
-    movies_df['director'] = df.get('director_name', df.get('director', pd.Series(['Unknown']*len(df))))
+    movies_df['genres'] = df.get('genres', pd.Series(['Unknown']*len(df))).fillna('')
+    movies_df['director'] = df.get('director_name', df.get('director', pd.Series(['Unknown']*len(df)))).fillna('')
     a1 = df.get('actor_1_name', df.get('cast', pd.Series(['']*len(df))))
     a2 = df.get('actor_2_name', pd.Series(['']*len(df)))
     a3 = df.get('actor_3_name', pd.Series(['']*len(df)))
