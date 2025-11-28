@@ -77,7 +77,7 @@ Update UI design in style.css for colors, icons, and layout.
 
 Add more filters (year, ratings, etc.) in both API and frontend.
 
-Replace or update dataset as needed.
+Replace dataset as we needed.
 
 API Endpoints
 Endpoint	Method	Description
