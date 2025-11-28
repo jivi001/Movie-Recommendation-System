@@ -72,7 +72,7 @@ Advanced Filters: Optionally enter director/actor names for smarter recommendati
 
 Enjoy Results: Browse how your preferences yield relevant movie cards.
 
-Customization
+Customization:
 Update UI design in style.css for colors, icons, and layout.
 
 Add more filters (year, ratings, etc.) in both API and frontend.
@@ -98,4 +98,3 @@ MIT License. See LICENSE file.
 Credits
 Movie dataset: Various public sources (IMDB, Wikipedia, Enthusiast Collections)
 
-Developer: [jivitesh / https://github.com/jivi001]
